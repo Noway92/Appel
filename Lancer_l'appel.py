@@ -19,7 +19,8 @@ driver.maximize_window()
 driver.get("https://www.leonard-de-vinci.net/")
 
 adresse1 = driver.find_element(By.XPATH,"/html/body/div[1]/form/div[3]/input")
-adresse1.send_keys("noe.le_yhuelic@edu.devinci.fr")
+mail = input("Donne ton adresse email :")
+adresse1.send_keys(mail)
 
 bouton1=driver.find_element(By.XPATH,"/html/body/div[1]/form/div[5]/span[2]")
 bouton1.click()
@@ -102,7 +103,7 @@ async def on_ready():
 
 @client.event
 async def send_notification(notif):
-    channel=client.get_channel(533322569713975296)
+    channel=client.get_channel(#Ecrire son propre channel)
     await channel.send(notif)
     '''
     if(notif=="l'appel n'est pas encore ouvert ou à déjà été validé"):
@@ -113,8 +114,8 @@ async def send_notification(notif):
     
 
 #On a écrit le TOKEN du BOT
-#Il faudra le chanegr de place pour le mettre dans la boucle
-client.run('MTIxMTgyMTI2MDgwMDAwMDEwMA.G6IIOT.XfnuPc_c6TzhDUY9X1SeXyB7hyfZFOGghqoIsk')
+#Il faudra le changer de place pour le mettre dans la boucle
+client.run(#ECRIRE SON PROPRE TOKEN du BOT)
 
 
 
