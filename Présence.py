@@ -30,7 +30,7 @@ def fct_general():
     driver.get("https://www.leonard-de-vinci.net/")
 
     adresse1 = driver.find_element(By.XPATH,"/html/body/form/div[3]/input")
-    adresse1.send_keys("noe.le_yhuelic@edu.devinci.fr")
+    adresse1.send_keys("Mettre votre adresse Devinci")
 
     bouton1=driver.find_element(By.XPATH,"/html/body/form/div[5]/span[2]")
     bouton1.click()
