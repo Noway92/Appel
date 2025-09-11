@@ -6,6 +6,20 @@ from datetime import datetime
 import discord
 import os
 import random
+from selenium.webdriver.common.action_chains import ActionChains
+import numpy as np
+import pytz
+
+def get_paris_time():
+    return datetime.now(pytz.timezone("Europe/Paris"))
+
+def human_like_click(driver, element):
+    actions = ActionChains(driver)
+    actions.move_to_element_with_offset(element, 10, 10)
+    actions.pause(max(0, np.random.normal(loc=1.5, scale=0.5)))
+    actions.click()
+    actions.perform()
+
 
 def fct_general():
     def is_between(start, end, target):
@@ -16,42 +30,45 @@ def fct_general():
     #chrome_driver_path = 'C:/Program Files/Chrome Driver Testing/chromedriver'
 
     options = Options()
+    options.add_argument("--headless")  # Obligatoire pour toi
     options.add_argument("--no-sandbox")
     options.add_argument("--disable-dev-shm-usage")
     options.add_argument("--disable-gpu")
-    options.add_argument("--headless")  # si tu veux sans interface
-    options.add_argument("--user-data-dir=/tmp/unique-profile")  # chemin temporaire
-
+    options.add_argument("--lang=fr-FR")
+    options.add_argument("user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36")
+    options.add_experimental_option("excludeSwitches", ["enable-automation"])
+    options.add_experimental_option("useAutomationExtension", False)
+    # Réutiliser un profil existant si possible (évite les profils temporaires)
+    # options.add_argument("--user-data-dir=/home/noe/.config/google-chrome/Default")
     driver = webdriver.Chrome(options=options)
+    driver.execute_script("Object.defineProperty(navigator, 'webdriver', {get: () => undefined})")
     driver.maximize_window()
 
 
     # Ouvrir une page web
     driver.get("https://www.leonard-de-vinci.net/")
-
     adresse1 = driver.find_element(By.XPATH,"/html/body/form/div[3]/input")
-    adresse1.send_keys("Mettre votre adresse Devinci")
+    human_like_click(driver, adresse1)
+    adresse1.send_keys("noe.le_yhuelic@edu.devinci.fr")
 
     bouton1=driver.find_element(By.XPATH,"/html/body/form/div[5]/span[2]")
-    bouton1.click()
+    human_like_click(driver, bouton1)
 
     mdp = os.getenv("MDP")
-    delai = random.uniform(2, 4)
-    time.sleep(delai)
+    time.sleep(max(0, np.random.normal(3, 1)))  # Moyenne 1.5s, écart-type 0.5s
     adresse2 = driver.find_element(By.XPATH,"/html/body/div[2]/div[2]/div/main/div/div/div/form/div[2]/div[2]/input")
+    human_like_click(driver, adresse2)
     adresse2.send_keys(mdp)
 
     bouton2=driver.find_element(By.XPATH,"/html/body/div[2]/div[2]/div/main/div/div/div/form/div[2]/div[4]/span")
-    bouton2.click()
+    human_like_click(driver, bouton2)
 
-    delai = random.uniform(2, 4)
-    time.sleep(delai)
+    time.sleep(max(0, np.random.normal(3, 1)))  # Moyenne 1.5s, écart-type 0.5s
 
     bouton3=driver.find_element(By.PARTIAL_LINK_TEXT,"Relev")
-    bouton3.click()
+    human_like_click(driver, bouton3)
 
-    delai = random.uniform(2, 4)
-    time.sleep(delai)
+    time.sleep(max(0, np.random.normal(3, 1)))  # Moyenne 1.5s, écart-type 0.5s
 
     #Recupérer le nombre de cours ce jour-ci
 
@@ -72,15 +89,18 @@ def fct_general():
         # Convertir chaque partie en objet datetime
         start_heure = datetime.strptime(heure1, "%H:%M")
         end_heure = datetime.strptime(heure2, "%H:%M")
+
+        current_time = get_paris_time()  # Heure actuelle à Paris (UTC+2)
+        current_time_str = current_time.strftime("%H:%M")  # Convertit en "HH:MM"
+        current_time_parsed = datetime.strptime(current_time_str, "%H:%M")
         #if is_between(start_heure, end_heure, datetime.strptime(str(datetime1.hour)+":"+str(datetime1.minute), "%H:%M")):
-        if is_between(start_heure, end_heure, datetime.strptime(str(datetime.now().hour)+":"+str(datetime.now().minute), "%H:%M")):
+        if is_between(start_heure, end_heure, current_time_parsed):
             test_trouver_heure=True
             bouton4=driver.find_element(By.XPATH,"/html/body/div[1]/div/div[3]/div[2]/div/div/div[2]/table/tbody/tr["+str(i)+"]/td[4]/a")
-            bouton4.click()
+            human_like_click(driver, bouton4)
             break
 
-    delai = random.uniform(2, 15)
-    time.sleep(delai)
+    time.sleep(max(0, np.random.normal(15, 5)))  # Moyenne 1.5s, écart-type 0.5s
     print("Test1 : ",test_trouver_heure)
     if(test_trouver_heure):
         #C'est pour vérifier si l'appel est ouvert ou pas 
@@ -123,11 +143,7 @@ def fct_general():
 
     #On a écrit le TOKEN du BOT
     #Il faudra le chanegr de place pour le mettre dans la boucle
-    client.run('Mettre son Propre id ici :)')
+    client.run('')
 
     return notif
-
-
-
-
 
